@@ -1,9 +1,8 @@
 import pyinputplus as pyip
 from tabulate import tabulate as tbl
+from Operasi import operator_function as opfu
 
-DB_Siswa = "data.csv"
 Nilai = 0
-
 #Function to Count Hasil
 def hasilakhir():
     global Nilai
@@ -14,66 +13,80 @@ def hasilakhir():
         hasil = "Tidak Lulus"
         return hasil 
 
-def show(database, title="\nData Nilai Ujian Siswa\n"):
+#Show Function
+def show(database, title="\n\t\t\t\t\tData Nilai Ujian Siswa\n"):
     # Show the title
     print(title)
-    
     # Setup header and data
     data = list(database.values())[1:]
     header = database['column']
-
     # Print data to user screen
     print(tbl(data, header, tablefmt="mixed_grid"))
 
 #Add Function
 def add(database):
     global Nilai
-
     show(database)
- 
-    #Input Option
     NISN = pyip.inputInt("Input NISN: ") 
-    Nama = input("Input Nama Siswa: ").capitalize()
+    Nama = pyip.inputStr("Input Nama Siswa: ").title()
     Sex = pyip.inputChoice(["M","F"],prompt="Input Jenis Kelamin (M/F): ")
-    Kelas = input("Input Kelas Siswa: ").upper()
-    Matematika,Indonesia,Inggris = input("Input Nilai Mapel MTK, B.Indonesia, B.Inggris: ").strip().split()
-    Nilai = int(Matematika) + int(Indonesia) + int(Inggris)
+    Kelas = pyip.inputChoice(["12A","12B","12C"],prompt="Input Kelas Siswa (12A/12B/12C): ").upper()
+    Matematika = pyip.inputNum("Input Nilai Mapel Matematika: ")
+    Indonesia = pyip.inputNum("Input Nilai Mapel Bahasa Indonesia: ")
+    Inggris = pyip.inputNum("Input Nilai Mapel Bahasa Inggris: ")
+    Nilai = Matematika + Indonesia + Inggris
     Hasil = hasilakhir()
-
-    database.update({f"{Nama}": [len(database)-1,NISN, Nama, Sex, Kelas, Matematika, Indonesia, Inggris, Nilai, Hasil]})
+    confirm = pyip.inputYesNo(prompt='Apakah anda ingin menyimpan data ini (yes/no)?: ')
+    if confirm == 'yes':
+        database[NISN] = [NISN, Nama, Sex, Kelas, Matematika,Indonesia, Inggris, Nilai, Hasil]
+        print('Data Berhasil diubah')
+    opfu.clear_screen()
     return database
 
 #Update Function
-#def update():
+def update(database):
+    global Nilai
+    show(database)
+    NISN = pyip.inputInt(prompt='Masukan Nomor Siswa yang ingin diubah: ')
+    opfu.clear_screen()
+    if NISN in database:
+        print(tbl([database[NISN]], database["column"], tablefmt='mixed_grid'))
+        continue_update = pyip.inputYesNo(prompt='Apakah anda ingin mengubah data ini (yes/no)?: ')
+        if continue_update == 'yes':
+                Nama = pyip.inputStr("Input Nama Siswa: ").title()
+                Sex = pyip.inputChoice(["M","F"],prompt="Input Jenis Kelamin (M/F): ")
+                Kelas = pyip.inputChoice(["12A","12B","12C"],prompt="Input Kelas Siswa (12A/12B/12C): ").upper()
+                Matematika = pyip.inputNum("Input Nilai Mapel Matematika: ")
+                Indonesia = pyip.inputNum("Input Nilai Mapel Bahasa Indonesia: ")
+                Inggris = pyip.inputNum("Input Nilai Mapel Bahasa Inggris: ")
+                Nilai = Matematika + Indonesia + Inggris
+                Hasil = hasilakhir()
+        else:
+            return database
+    confirm = pyip.inputYesNo(prompt='Apakah anda ingin menyimpan data ini (yes/no)?: ')
+    if confirm == 'yes':
+        database[NISN] = [NISN, Nama, Sex, Kelas, Matematika,Indonesia, Inggris, Nilai, Hasil]
+        print('Data Berhasil diubah')
+    else :
+        print('Nomor Siswa tidak ada!')
+    opfu.clear_screen()
+    return database
 
 #Delete Function
 def delete(database):
-    """A function to remove fruit from the database
-
-    Args:
-        database (dict): Fruit database
-
-    Returns:
-        dict: Latest database
-    """
-    # Show the data
     show(database)
-
-    # Input the index of fruit to be deleted
-    id = pyip.inputInt(prompt="Masukan Index Siswa: ", lessThan=len(database)-1)
-
-    # Iterations of fruit in the database
-    for key, value in database.copy().items():
-        # If header then continue
-        if key == "column":
-            continue
-        # If fruit is available, remove by index
-        if id in value:
-            del database[key]
-        # In addition, update the index of the remaining fruit
-        elif id < value[0]: 
-            value[0] -= 1
-            database.update({f"{key}": value})
-    # Show the data
-    show(database)
+    NISN = pyip.inputInt(prompt="Masukan Nomor Siswa: ")
+    opfu.clear_screen()
+    if NISN in database:
+        print(tbl([database[NISN]], database["column"], tablefmt='mixed_grid'))
+        continue_update = pyip.inputYesNo(prompt='Apakah anda ingin menghapus data ini (yes/no)?: ')
+        if continue_update == 'yes':
+            for key, value in database.copy().items():
+                if key == "column":
+                    continue
+                if NISN in value:
+                    del database[key]
+    else :
+        print('Nomor Siswa tidak ada!')
+    opfu.clear_screen()
     return database
