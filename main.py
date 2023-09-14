@@ -2,7 +2,7 @@
 import os
 import csv
 import sys
-from CRUD import Database_Func as df
+from Operasi import crud as df
 from Operasi import operator_function as opfu
 import pyinputplus as pyip
 
@@ -32,37 +32,64 @@ if __name__ == "__main__":
     db = initialize_db()
 
     while True:
+        opfu.clear_screen()
         Login = pyip.inputChoice(["Admin","Guest"],prompt="""\n\tIngit Melihat Data Sebagai Siapa?\n
 - Admin
 - Guest
 
 Pilihan: """).upper()
-        opfu.clear_screen()
         if Login == "ADMIN":
             while opfu.login() == True:
                 opfu.clear_screen()
                 while True:
                     df.show(db)
-                    inp = int(input("""1. Add
-2. Update
-3. Delete
-4. Exit
+                    first_inp = int(pyip.inputChoice(["1","2","3"],prompt="""1. Adv View
+2. Edit
+3. Exit
 Pilih Salah Satu Opsi: """))
                     opfu.clear_screen()
-                    match inp:
-                        case 1: df.add(db)
-                        case 2: df.update(db)
-                        case 3: df.delete(db)
-                        case 4: break
+                    
+                    while first_inp == 1:
+                        df.show(db)
+                        fitur = int(pyip.inputChoice(["1","2","3"],prompt="""\n\tMasukan Opsi yang anda inginkan: \n
+1. Find
+2. 
+3. Back
+Pilihan: """))
+                        match fitur:
+                            case 1: opfu.find_NISN(db)
+                            case 3: break
 
-                        # Keep database up to date
-                    with open(PATH, 'w', encoding="utf-8", newline="") as file:
-                        # Create a writer object
-                        writer = csv.writer(file, delimiter=";")
-                        # Write the data to csv file
-                        writer.writerows(db.values())
-        else:
+                    while first_inp == 2:
+                        df.show(db)
+                        second_inp = int(pyip.inputChoice(["1","2","3","4"],prompt="""1. Add
+2. Update
+3. Delete
+4. Back
+Pilih Salah Satu Opsi: """))
+                        opfu.clear_screen()
+                        match second_inp:
+                            case 1: df.add(db)
+                            case 2: df.update(db)
+                            case 3: df.delete(db)
+                            case 4: break
+                            # Keep database up to date
+                        with open(PATH, 'w', encoding="utf-8", newline="") as file:
+                            # Create a writer object
+                            writer = csv.writer(file, delimiter=";")
+                            # Write the data to csv file
+                            writer.writerows(db.values())
+                    else:
+                        exit()
+        while Login == "GUEST":
             df.show(db)
-            break
+            fitur = int(pyip.inputChoice(["1","2","3"],prompt="""\n\tMasukan Opsi yang anda inginkan: \n
+1. Find
+2. 
+3. Exit
+Pilihan: """))
+            match fitur:
+                case 1: opfu.find_NISN(db)
+                case 3: exit()
 
     
