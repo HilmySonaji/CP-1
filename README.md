@@ -5,7 +5,15 @@ DataSiswa application was released in 2023 Helping business people especially th
 1. **Read Student**, DataSiswa displays the entire Student available in the database, and you will always get the latest updates from your database.
 2. **Add Student**, DataSiswa helps you register new Student and update existing Student, such as Name or Score.
 3. **Delete Student**, DataSiswa provides high mobility to remove items that you do not need.
-4. **Edit Student**, DataSiswa provides an experience for Teacher to Edit and Reinput any item from anywhere at any time.
+4. **Modify Student**, DataSiswa provides an experience for Teacher to Edit and Reinput any item from anywhere at any time.
+
+## Usage
+This system caters to two distinct user types:
+
+1. **Admin**: Possesses full access to data management. The admin has the capability to:
+        Add, modify, delete, and view Student Data.
+2. **Guest**: Have limited access, focusing on information relevant to their needs. such as:
+       View Data Student
 
 ## Installation
 
