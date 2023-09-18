@@ -3,32 +3,23 @@ import csv
 from tabulate import tabulate as tbl
 from Operasi import operator_function as opfu
 
-#Temporary Variable
-Nilai = 0
-#Function to Count Hasil
-def hasilakhir():
-    global Nilai
-    if Nilai >= 210:
-        hasil = "Lulus"
-        return hasil
-    else:
-        hasil = "Tidak Lulus"
-        return hasil 
-
 #Show Function
 def show(database, title="\t\t\t\t\tData Nilai Ujian Siswa\n"):
     # Show the title
     print(title)
+    coldata = database.get("column",[])
+    filterdict = {key: value for key, value in database.items() if key != "column"}
+    sortdata = dict(sorted(filterdict.items(), key = lambda item: item[1][0], reverse=False))
+    sortdatabase = {"column": coldata,**sortdata}
     # Setup header and data
-    data = list(database.values())[1:]
-    header = database['column']
+    data = list(sortdatabase.values())[1:]
+    header = sortdatabase['column']
     # Print data to user screen
     print(tbl(data, header, tablefmt="mixed_grid"))
 
 #Add Function
 def add(database):
     opfu.clear_screen()
-    global Nilai
     show(database)
     NISN = pyip.inputInt("Input NISN: ")
     if NISN in database:
@@ -41,7 +32,9 @@ def add(database):
         Indonesia = pyip.inputNum("Input Nilai Mapel Bahasa Indonesia: ")
         Inggris = pyip.inputNum("Input Nilai Mapel Bahasa Inggris: ")
         Nilai = Matematika + Indonesia + Inggris
-        Hasil = hasilakhir()
+        if Nilai >= 210: Hasilx = "Lulus"
+        else: Hasilx = "Tidak Lulus"
+        Hasil = Hasilx
         confirm = pyip.inputYesNo(prompt='Apakah anda ingin menyimpan data ini (yes/no)?: ')
         if confirm == 'yes':
             database[NISN] = [NISN, Nama, Sex, Kelas, Matematika,Indonesia, Inggris, Nilai, Hasil]
@@ -50,7 +43,7 @@ def add(database):
     return database
 
 #Update Function
-def update(database ): #row
+def update(database ): 
     opfu.clear_screen()
     show(database)
     NISN = pyip.inputInt(prompt='Masukan Nomor Siswa yang ingin diubah: ')
@@ -66,10 +59,8 @@ def update(database ): #row
                 Indonesia = pyip.inputNum("Input Nilai Mapel Bahasa Indonesia: ")
                 Inggris = pyip.inputNum("Input Nilai Mapel Bahasa Inggris: ")
                 Nilai = Matematika + Indonesia + Inggris
-                if Nilai >= 210:
-                    Hasilx = "Lulus"
-                else:
-                    Hasilx = "Tidak Lulus"
+                if Nilai >= 210: Hasilx = "Lulus"
+                else: Hasilx = "Tidak Lulus"
                 Hasil = Hasilx
         else:
             return database

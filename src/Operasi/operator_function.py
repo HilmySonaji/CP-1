@@ -26,7 +26,7 @@ def login():
 def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
 
-#find Function
+#Find NISN Function
 def find_NISN(database):
     global NISN
     clear_screen()
@@ -39,6 +39,7 @@ def find_NISN(database):
     else:
         False   
 
+#Find Kelas Function
 def find_Kelas(database):
     datacustom = list(database.values())[1:]
     data0 = []
@@ -54,6 +55,7 @@ def find_Kelas(database):
     else:
         print("data not found")
 
+#Find Hasil Function
 def find_Hasil(database):
     data0 = []
     datacustom = list(database.values())[1:]
@@ -93,38 +95,23 @@ Pilihan : """))
 #Update Combination For Non Selected
 def upcomfornon(database):
     global NISN
+    clear_screen()
     df.show(database)
     NISN = pyip.inputInt(prompt='Masukan Nomor Siswa yang ingin diubah: ')
-    while True:
-        clear_screen()
-        print(tbl([database[NISN]], database['column'], tablefmt='mixed_grid'))
-        pilih = int(pyip.inputChoice(["1","2","3"],prompt="""
+    if NISN in database:
+        while True:
+            clear_screen()
+            print(tbl([database[NISN]], database['column'], tablefmt='mixed_grid'))
+            pilih = int(pyip.inputChoice(["1","2","3"],prompt="""
 1. Edit Value
 2. Edit Row
 3. Back
 Pilihan : """))
-        if pilih == 1: upcolfun(database)
-        elif pilih  == 2: updateselectedRowNISN(database)
-        else :
-            break
-
-#Update Combination For Kelas And hasil
-def upcomforx(database):
-    clear_screen()
-    NISN = pyip.inputInt(prompt='Masukan Nomor Siswa yang ingin diubah: ')
-    while NISN in database:
-        clear_screen()
-        print(tbl([database[NISN]], database['column'], tablefmt='mixed_grid'))
-        pilih = int(pyip.inputChoice(["1","2","3"],prompt="""
-1. Edit Value
-2. Edit Row
-3. Back
-Pilihan : """))
-        if pilih == 1: upcolfun(database)
-        elif pilih  == 2: updateselectedRowNISN(database)
-        else :
-            break
-    else: print ("NISN tidak terdaftar!!!")
+            if pilih == 1: upcolfun(database)
+            elif pilih  == 2: updateselectedRowNISN(database)
+            else :
+                break
+    else : print("NISN Tidak Terdaftar!!!")
 
 #Update Row Selected Function
 def updateselectedRowNISN(database): #selected row
@@ -142,19 +129,15 @@ def updateselectedRowNISN(database): #selected row
                 Indonesia = pyip.inputNum("Input Nilai Mapel Bahasa Indonesia: ")
                 Inggris = pyip.inputNum("Input Nilai Mapel Bahasa Inggris: ")
                 Nilai = Matematika + Indonesia + Inggris
-                if Nilai >= 210:
-                    Hasilx = "Lulus"
-                else:
-                    Hasilx = "Tidak Lulus"
+                if Nilai >= 210: Hasilx = "Lulus"
+                else: Hasilx = "Tidak Lulus"
                 Hasil = Hasilx
-        else:
-            return database
+        else: return database
         confirm = pyip.inputYesNo(prompt='Apakah anda ingin menyimpan data ini (yes/no)?: ')
         if confirm == 'yes':
             database[NISN] = [NISN, Nama, Sex, Kelas, Matematika,Indonesia, Inggris, Nilai, Hasil]
             print('Data Berhasil diubah')
-    else :
-        print('Nomor Siswa tidak ada!')
+    else : print('Nomor Siswa tidak ada!')
     clear_screen()
     print(tbl([database[NISN]], database['column'], tablefmt='mixed_grid'), '\n')
     return database
@@ -215,22 +198,6 @@ def deleteselectedNISN(database):
     clear_screen()
     print(tbl([database[NISN]], database['column'], tablefmt='mixed_grid'), '\n')
     return database  
-
-#Delete Function For Hasil and kelas
-def delforx(database):
-    NISN = pyip.inputInt(prompt='Masukan Nomor Siswa yang ingin diubah: ')
-    clear_screen()
-    if NISN in database:
-        print(tbl([database[NISN]], database["column"], tablefmt='mixed_grid'))
-        continue_update = pyip.inputYesNo(prompt='Apakah anda ingin menghapus data ini (yes/no)?: ')
-        if continue_update == 'yes':
-            for key, value in database.copy().items():
-                if key == "column":
-                    continue
-                if NISN in value:
-                    del database[key]
-    else : print('Nomor Siswa tidak ada!')
-
 
 #Mapel Sum Function For Selected
 def mapelsum(database,NISN):
@@ -384,17 +351,13 @@ Pilihan: """))
                         # Write the data to csv file
                         writer.writerows(database.values())
                 while fitur2 == 2:
-                    fitur3 = int(pyip.inputChoice(["1","2","3","4"],prompt="""\tMasukan Opsi yang anda inginkan:
+                    fitur3 = int(pyip.inputChoice(["1","2"],prompt="""\tMasukan Opsi yang anda inginkan:
 1. Find Kelas Lain
-2. Edit 
-3. Delete 
-4. Back                                      
+2. Back                             
 Pilihan: """))
                     match fitur3:
                         case 1: find_Kelas(database)
-                        case 2: upcomforx(database)
-                        case 3: delforx(database)
-                        case 4: break
+                        case 2: break
                     
                     # Keep database up to date
                     with open("data/data.csv", 'w', encoding="utf-8", newline="") as file:
@@ -403,11 +366,9 @@ Pilihan: """))
                         # Write the data to csv file
                         writer.writerows(database.values())
                 while fitur2  == 3:
-                    fitur3 = int(pyip.inputChoice(["1","2","3","4"],prompt="""\tMasukan Opsi yang anda inginkan:
+                    fitur3 = int(pyip.inputChoice(["1","2"],prompt="""\tMasukan Opsi yang anda inginkan:
 1. Input Hasil lain
-2. Edit 
-3. Delete
-4. Back                                      
+2. Back                                      
 Pilihan: """))
                     match fitur3:
                         case 1: find_Hasil(database)
