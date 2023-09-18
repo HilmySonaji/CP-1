@@ -9,6 +9,11 @@ NISN = 0
 
 #Login Function
 def login():
+    """_summary_
+
+    Returns:
+        dict: Login 
+    """    
     clear_screen()
     print("\t\tLOGIN\n")
     User = input("Masukan User: ")
@@ -28,6 +33,11 @@ def clear_screen():
 
 #Find NISN Function
 def find_NISN(database):
+    """_summary_
+
+    Args:
+        database (dict): Finding data using NISN
+    """    
     global NISN
     clear_screen()
     df.show(database)
@@ -41,6 +51,11 @@ def find_NISN(database):
 
 #Find Kelas Function
 def find_Kelas(database):
+    """_summary_
+
+    Args:
+        database (dict): finding data using Kelas
+    """    
     datacustom = list(database.values())[1:]
     data0 = []
     clear_screen()
@@ -57,11 +72,17 @@ def find_Kelas(database):
 
 #Find Hasil Function
 def find_Hasil(database):
+    """_summary_
+
+    Args:
+        database (dict): finding data using Hasil
+    """    
     data0 = []
     datacustom = list(database.values())[1:]
     clear_screen()
     df.show(database)
-    hinput = int(pyip.inputChoice(["1","2"],prompt="""1. Lulus 
+    hinput = int(pyip.inputChoice(["1","2"],prompt="""\tMasukan Opsi yang anda inginkan:
+1. Lulus 
 2. Tidak Lulus
 Pilihan:  """))
     if hinput == 1:
@@ -79,6 +100,11 @@ Pilihan:  """))
 
 #Update Combination For Selected
 def upcom(database):
+    """_summary_
+
+    Args:
+        database (dict): Update Function Combination of Function upcolfun and updateselectedRowNISN but the NISN is already Selected
+    """    
     while True:
         clear_screen()
         print(tbl([database[NISN]], database['column'], tablefmt='mixed_grid'))
@@ -94,6 +120,11 @@ Pilihan : """))
 
 #Update Combination For Non Selected
 def upcomfornon(database):
+    """_summary_
+
+    Args:
+        database (dict): Update Function Combination of Function upcolfun and updateselectedRowNISN but u have to input ur own NISN
+    """    
     global NISN
     clear_screen()
     df.show(database)
@@ -114,7 +145,15 @@ Pilihan : """))
     else : print("NISN Tidak Terdaftar!!!")
 
 #Update Row Selected Function
-def updateselectedRowNISN(database): #selected row
+def updateselectedRowNISN(database):
+    """_summary_
+
+    Args:
+        database (dict): updating 1 row of data using NISN that are already selected using Find_NISN Function
+
+    Returns:
+        dict: updated data
+    """    
     global NISN
     NISN = NISN
     clear_screen()
@@ -144,6 +183,11 @@ def updateselectedRowNISN(database): #selected row
 
 #Update Column Function For Selected
 def upcolfun(database):
+    """_summary_
+
+    Args:
+        database (dict): Updating Value using NISN that are already selected using Find_NISN Function
+    """    
     global NISN
     old={}
     new={}
@@ -153,7 +197,7 @@ def upcolfun(database):
     clear_screen()
     print(tbl([database[NISN]], database['column'], tablefmt='mixed_grid'))
     while True:
-        upin = int(pyip.inputChoice(["1","2","3","4","5"],prompt="""
+        upin = int(pyip.inputChoice(["1","2","3","4","5"],prompt="""\tMasukan value yang ingin anda rubah:
 1. Nama
 2. Sex
 3. Kelas
@@ -183,6 +227,14 @@ Pilihan : """))
 
 #Delete Selected Function
 def deleteselectedNISN(database):
+    """_summary_
+
+    Args:
+        database (dict): Deleting data using NISN that are already selected using Find_NISN Function
+
+    Returns:
+        dict: deleted data
+    """    
     global NISN
     NISN = NISN
     clear_screen()
@@ -201,6 +253,12 @@ def deleteselectedNISN(database):
 
 #Mapel Sum Function For Selected
 def mapelsum(database,NISN):
+    """_summary_
+
+    Args:
+        database (dict): Updating Value of Matematika,Indonesia,Inggris,Nilai,Hasil value using NISN that are already selected using Find_NISN Function
+        NISN (int): Primary Key of database
+    """    
     NISN = NISN
     clear_screen()
     print(tbl([database[NISN]], database['column'], tablefmt='mixed_grid'), '\n')
@@ -262,6 +320,11 @@ Pilihan: """))
 
 #Guest Login Function
 def guest(database):
+    """_summary_
+
+    Args:
+        database (dict): Showing Main Program for Guest Login
+    """    
     while True:
         clear_screen()
         df.show(database)
@@ -306,12 +369,18 @@ Pilihan: """))
 
 #Admin Login Function
 def admin(database):
+    """_summary_
+
+    Args:
+        database (dict): Showing Main Program for Admin Login
+    """    
     while login() == True:
         clear_screen()
         while True:
             clear_screen()
             df.show(database)
-            fitur = int(pyip.inputChoice(["1","2","3"],prompt="""1. Adv View
+            fitur = int(pyip.inputChoice(["1","2","3"],prompt="""\tMasukan Opsi yang anda inginkan:
+1. Adv View
 2. Edit
 3. Exit
 Pilih Salah Satu Opsi: """))
@@ -376,7 +445,8 @@ Pilihan: """))
             while fitur == 2:
                 clear_screen()
                 df.show(database)
-                fitur1 = int(pyip.inputChoice(["1","2","3","4"],prompt="""1. Add
+                fitur1 = int(pyip.inputChoice(["1","2","3","4"],prompt="""\tMasukan Opsi yang anda inginkan:
+1. Add
 2. Edit
 3. Delete
 4. Back

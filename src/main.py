@@ -8,6 +8,11 @@ import pyinputplus as pyip
 
 
 def initialize_db():
+    """_summary_
+
+    Returns:
+        dict: initiating database
+    """    
     with open(PATH, 'r') as file:
         # Read the data from csv file
         reader = csv.reader(file, delimiter=";")

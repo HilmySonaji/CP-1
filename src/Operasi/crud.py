@@ -5,10 +5,18 @@ from Operasi import operator_function as opfu
 
 #Show Function
 def show(database, title="\t\t\t\t\tData Nilai Ujian Siswa\n"):
+    """_summary_
+
+    Args:
+        database (dict): Showing Database
+    Returns:
+        Returns a printed table of the database using tabulate module
+    """    
     # Show the title
     print(title)
     coldata = database.get("column",[])
     filterdict = {key: value for key, value in database.items() if key != "column"}
+    # Sorting
     sortdata = dict(sorted(filterdict.items(), key = lambda item: item[1][0], reverse=False))
     sortdatabase = {"column": coldata,**sortdata}
     # Setup header and data
@@ -19,6 +27,13 @@ def show(database, title="\t\t\t\t\tData Nilai Ujian Siswa\n"):
 
 #Add Function
 def add(database):
+    """_summary_
+
+    Args:
+        database (dict): Adding new data to database
+    Returns:
+        New Data
+    """    
     opfu.clear_screen()
     show(database)
     NISN = pyip.inputInt("Input NISN: ")
@@ -44,6 +59,13 @@ def add(database):
 
 #Update Function
 def update(database ): 
+    """_summary_
+
+    Args:
+        database (dict): updating data that is already available
+    Returns:
+        updated data
+    """    
     opfu.clear_screen()
     show(database)
     NISN = pyip.inputInt(prompt='Masukan Nomor Siswa yang ingin diubah: ')
@@ -76,6 +98,13 @@ def update(database ):
 
 #Delete Function
 def delete(database):
+    """_summary_
+
+    Args:
+        database (dict): deleting data that is already available
+    Returns:
+        Deleted Data
+    """    
     opfu.clear_screen()
     show(database)
     NISN = pyip.inputInt(prompt="Masukan Nomor Siswa: ")
